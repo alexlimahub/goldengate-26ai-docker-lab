@@ -1,0 +1,16 @@
+# Environment — contains passwords; never commit
+.env
+vdt.env
+
+# TLS private key
+cert/ogg.key
+
+# Runtime artifacts
+*.log
+response.json
+response_cleanup.json
+response_parallel.json
+cwallet.sso
+
+# macOS
+.DS_Store

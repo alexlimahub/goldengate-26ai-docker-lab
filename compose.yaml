@@ -1,0 +1,266 @@
+# This Docker Compose file is for education purpose only and it contains all necessary components 
+# to instantiate one Oracle GoldenGate 23 instance and two Oracle Database 23 Free instances
+
+# This yaml file will create docker containers:
+#   1- Two Oracle Goldengate 23 Hub (WEST and EAST)
+#   2- One Oracle Database 23  (Named: West)
+#   3- One Oracle Database 23  (Named: East)
+#   4- One Oracle GoldenGate Veridata 23.5
+
+# To connect to goldengate and databases you can go to:
+#  GG Microservices: https://localhost:9090  [ user: oggadmin, password: Welcome##123 ]
+#  GG Microservices: https://localhost:8080  [ user: oggadmin, password: Welcome##123 ]
+#  GG Veridata: http://localhost:8831/veridata  [ user: <veridata_user>, password: Welcome!1 ]
+#  GG InfluxDB: http://localhost:8806  [ user: admin, password: Welcome##123 ]
+#  GG Grafana: http://localhost:3000  [ user: admin, password: Welcome##123 ]
+#
+#  Database Service West for SQL Developer: localhost:1534/FREEPDB1  [ sys password: Welcome##123 ]
+#  Database Service East for SQL Developer: localhost:1535/FREEPDB1  [ sys password: Welcome##123 ]
+#
+#  Internal ports all all the same: 1521
+#  Database Service West for GoldenGate: <IP>:1521/FREEPDB1  [ oggadmin password: Welcome##123 ]
+#  Database Service East for GoldenGate: <IP>:1521/FREEPDB1  [ oggadmin password: Welcome##123 ]
+
+# Sample HR schema is installed on both databases
+
+#version: '3.8'
+services:
+# Create GoldenGate HUB Instance
+  ggw:
+    container_name: oggWEST
+    hostname: oggWEST
+    image: container-registry.oracle.com/goldengate/goldengate-oracle:latest
+    ports:
+      - "9090:8443"
+      - "9091:9012"
+    deploy:
+      resources:
+          limits:
+            cpus: '4.0'
+            memory: 8192M
+          reservations:
+            cpus: '4.0'
+            memory: 8192M
+    env_file:
+      - .env
+    environment:
+      - OGG_DEPLOYMENT=WEST    
+    networks:
+      ogg_docker_network_v1:
+        ipv4_address: ${DOCKER_OGG_WEST_IP}
+    volumes:
+      - ${PWD}/cert:/etc/nginx/cert:rw
+    #platform: "linux/x86_64"
+    platform: linux/amd64
+
+  gge:
+    container_name: oggEAST
+    hostname: oggEAST
+    image: container-registry.oracle.com/goldengate/goldengate-oracle:latest
+    ports:
+      - "8080:8443"
+      - "8081:9012"
+    deploy:
+      resources:
+          limits:
+            cpus: '4.0'
+            memory: 8192M
+          reservations:
+            cpus: '4.0'
+            memory: 8192M
+    env_file:
+      - .env
+    environment:
+      - OGG_DEPLOYMENT=EAST  
+    networks:
+      ogg_docker_network_v1:
+        ipv4_address: ${DOCKER_OGG_EAST_IP}
+    volumes:
+      - ${PWD}/cert:/etc/nginx/cert:rw
+    #platform: "linux/x86_64"
+    platform: linux/amd64
+
+# Create WEST Side Database 23.8 Free
+  databaseW:
+    container_name: dbWEST
+    hostname: dbWEST
+    #image: iad.ocir.io/paasdevgg/alima-ocr/db_free_slim_ogg:latest
+    image: container-registry.oracle.com/database/free:23.26.1.0-lite-arm64
+    #image: alexlima/db_free_slim_ogg:latest
+    ports:
+      - "1534:1521"
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      ogg_docker_network_v1:
+        ipv4_address: ${DOCKER_DB_WEST_IP}
+    platform: "linux/arm64"
+
+# Create EAST Side Database 23.8 Free
+  databaseE:
+    container_name: dbEAST
+    hostname: dbEAST
+    #image: iad.ocir.io/paasdevgg/alima-ocr/db_free_slim_ogg:latest
+    image: container-registry.oracle.com/database/free:23.26.1.0-lite-arm64
+    #image: alexlima/db_free_slim_ogg:latest
+    ports:
+      - "1535:1521"
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      ogg_docker_network_v1:
+        ipv4_address: ${DOCKER_DB_EAST_IP}
+    platform: "linux/arm64"
+
+# # Create EAST Side Database 23.16
+#   database2326:
+#     container_name: db2326E
+#     hostname: db2326E
+#     image: iad.ocir.io/paasdevgg/alima-ocr/database/enterprise:latest
+#     #image: alexlima/db_free_slim_ogg:latest
+#     ports:
+#       - "1536:1521"
+#     env_file:
+#       - .env
+#     environment: 
+#       - INIT_SGA_SIZE=1536  
+#       - INIT_PGA_SIZE=1536
+#     restart: unless-stopped
+#     networks:
+#       ogg_docker_network_v1:
+#         ipv4_address: 172.52.0.105
+#     platform: "linux/x86_64"
+
+# Oracle GoldenGate Veridata
+  veridata:
+    container_name: oggvdt
+    hostname: oggvdt
+    #image: oracle/oggvdt:23.5.0.0
+    #image: iad.ocir.io/paasdevgg/alima-ocr/veridata:23.26.1.0.1
+    image: container-registry.oracle.com/goldengate/goldengate-veridata:23.26.1.0.1
+    ports:
+      - "8831:8831"
+    # Applies with `docker compose up`
+    cpus: "4.0"          # try 1.0 first; drop to 0.5 if you want it very “background”
+    mem_limit: "8192m"
+    mem_reservation: "4096m"
+    cpu_shares: 128      # lower priority vs other containers (default is 1024)  
+
+    env_file:
+      - vdt.env
+    restart: unless-stopped
+    networks:
+      ogg_docker_network_v1:
+        ipv4_address: ${DOCKER_VERIDATA_IP}
+    entrypoint: ["/bin/bash", "/usr/local/bin/vdt-entrypoint.sh"]
+    volumes:
+      - veridata_data:/u01/vdt
+      - ${PWD}/vdt-entrypoint.sh:/usr/local/bin/vdt-entrypoint.sh:ro
+    
+      #- veridata_mysql:/u01/vdt/mysql-commercial-8.0.42-linux-glibc2.17-x86_64-minimal
+    #  - veridata_data:/opt/oracle/veridata
+    #platform: "linux/x86_64"
+    platform: linux/amd64
+    
+  # ---- One-shot init: WEST metrics -> StatsD (tig-aio:8125)
+  # ogg-west-metrics-init:
+  #   image: curlimages/curl:8.7.1
+  #   depends_on:
+  #     ggw:
+  #       condition: service_healthy
+  #     tig-aio:
+  #       condition: service_started
+  #   networks:
+  #     - ogg_docker_network_v1
+  #   restart: "no"
+  #   environment:
+  #     - OGG_WEST_HOST=${OGG_WEST_HOST:-oggWEST}
+  #   command: >
+  #     sh -lc '
+  #       set -e;
+  #       # Wait for WEST admin endpoint (inside the compose network)
+  #       until curl -sk -u oggadmin:Welcome##123 https://$${OGG_WEST_HOST}/services/v2/deployments/WEST -o /dev/null; do
+  #         sleep 2;
+  #       done;
+  #       # 1) stop WEST
+  #       curl -sk -u oggadmin:Welcome##123 \
+  #         -H "Content-Type: application/json" \
+  #         -X PATCH https://$${OGG_WEST_HOST}/services/v2/deployments/WEST \
+  #         --data-raw "{\"status\":\"stopped\",\"enabled\":false}";
+  #       # 2) set metrics to StatsD on tig-aio:8125 (hostname, no hard IP)
+  #       curl -sk -u oggadmin:Welcome##123 \
+  #         -H "Content-Type: application/json" \
+  #         -X PATCH https://$${OGG_WEST_HOST}/services/v2/deployments/WEST \
+  #         --data-raw "{\"metrics\":{\"enabled\":true,\"servers\":[{\"type\":\"pmsrvr\",\"protocol\":\"uds\"},{\"type\":\"statsd\",\"protocol\":\"udp\",\"host\":\"tig-aio\",\"port\":8125}]}}";
+  #       # 3) start WEST
+  #       curl -sk -u oggadmin:Welcome##123 \
+  #         -H "Content-Type: application/json" \
+  #         -X PATCH https://$${OGG_WEST_HOST}/services/v2/deployments/WEST \
+  #         --data-raw "{\"status\":\"running\",\"enabled\":true}";
+  #       # Optional: quick check
+  #       curl -sk -u oggadmin:Welcome##123 https://$${OGG_WEST_HOST}/services/v2/deployments/WEST | jq -r ".metrics" || true;
+  #     '
+
+  #  # ---- One-shot init: EAST metrics -> StatsD (tig-aio:8125)
+  # ogg-east-metrics-init:
+  #   image: curlimages/curl:8.7.1
+  #   depends_on:
+  #     gge:
+  #       condition: service_healthy
+  #     tig-aio:
+  #       condition: service_started
+  #   networks:
+  #     - ogg_docker_network_v1
+  #   restart: "no"
+  #   environment:
+  #     - OGG_EAST_HOST=${OGG_EAST_HOST:-oggEAST}
+  #   command: >
+  #     sh -lc '
+  #       set -e;
+  #       until curl -sk -u oggadmin:Welcome##123 https://$${OGG_EAST_HOST}/services/v2/deployments/EAST -o /dev/null; do
+  #         sleep 2;
+  #       done;
+  #       curl -sk -u oggadmin:Welcome##123 \
+  #         -H "Content-Type: application/json" \
+  #         -X PATCH https://$${OGG_EAST_HOST}/services/v2/deployments/EAST \
+  #         --data-raw "{\"status\":\"stopped\",\"enabled\":false}";
+  #       curl -sk -u oggadmin:Welcome##123 \
+  #         -H "Content-Type: application/json" \
+  #         -X PATCH https://$${OGG_EAST_HOST}/services/v2/deployments/EAST \
+  #         --data-raw "{\"metrics\":{\"enabled\":true,\"servers\":[{\"type\":\"pmsrvr\",\"protocol\":\"uds\"},{\"type\":\"statsd\",\"protocol\":\"udp\",\"host\":\"tig-aio\",\"port\":8125}]}}";
+  #       curl -sk -u oggadmin:Welcome##123 \
+  #         -H "Content-Type: application/json" \
+  #         -X PATCH https://$${OGG_EAST_HOST}/services/v2/deployments/EAST \
+  #         --data-raw "{\"status\":\"running\",\"enabled\":true}";
+  #       curl -sk -u oggadmin:Welcome##123 https://$${OGG_EAST_HOST}/services/v2/deployments/EAST | jq -r ".metrics" || true;
+  #     '
+  # NEW: Dashboard importer service
+  # grafana-dashboard-importer:
+  #   image: curlimages/curl:8.7.1
+  #   container_name: grafana-dashboard-importer
+  #   depends_on:
+  #     - tig-aio
+  #   volumes:
+  #     - ./import-dashboard.sh:/import-dashboard.sh:ro
+  #     - ./Main Dashboard-1764965825055.json:/dashboard.json:ro
+  #   entrypoint: ["/bin/sh", "/import-dashboard.sh"]
+  #   networks:
+  #     - ogg_docker_network_v1
+  #   restart: "no"  # Run once and exit
+
+networks:
+  ogg_docker_network_v1:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 172.52.0.0/16
+
+volumes:
+  veridata_data: {}
+
+#volumes:
+#  tig_influxdb: {}
+#  tig_influxcfg: {}
+#  tig_grafana: {}

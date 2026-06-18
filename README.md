@@ -1,0 +1,205 @@
+# Oracle GoldenGate 23ai Lab — Docker Compose
+
+A fully automated Docker Compose lab that provisions two Oracle Database 23ai Free instances with bidirectional GoldenGate replication and Veridata data comparison — all running locally on a single machine.
+
+---
+
+## Architecture
+
+```
+  ┌────────────────────────────────────────────────────────┐
+  │                  Docker Network (172.52.0.0/16)        │
+  │                                                        │
+  │   ┌──────────────┐   GG Trail   ┌──────────────┐      │
+  │   │  dbWEST      │◄────────────►│  dbEAST      │      │
+  │   │  Oracle 23ai │              │  Oracle 23ai │      │
+  │   │  port 1534   │              │  port 1535   │      │
+  │   └──────┬───────┘              └──────┬───────┘      │
+  │          │                             │              │
+  │   ┌──────▼───────┐              ┌──────▼───────┐      │
+  │   │  oggWEST     │──DP──Trail──►│  oggEAST     │      │
+  │   │  GoldenGate  │              │  GoldenGate  │      │
+  │   │  port 9090   │              │  port 8080   │      │
+  │   └──────────────┘              └──────────────┘      │
+  │                                                        │
+  │   ┌──────────────────────────────────────────────┐     │
+  │   │  Veridata 23.26  (port 8831)                 │     │
+  │   │  Compares HR schema between WEST and EAST    │     │
+  │   └──────────────────────────────────────────────┘     │
+  └────────────────────────────────────────────────────────┘
+```
+
+**Replication pipeline:**
+- Change data: `EWEST` → trail `ew` → `DPWE` → trail `dw` → `RWEST` → dbEAST
+- HR schema is installed on both databases with Auto-CDR (conflict detection) enabled
+
+---
+
+## Prerequisites
+
+- Docker Desktop (with at least 16 GB RAM allocated)
+- `docker compose` v2+
+- `curl`, `unzip` available on the host machine
+- An Oracle account — **see license notice below**
+
+---
+
+## ⚠️ Oracle Container Registry — License Acceptance Required
+
+All images used by this lab are hosted on the **Oracle Container Registry (OCR)** at `container-registry.oracle.com`.
+
+| Image | Registry path |
+|-------|--------------|
+| Oracle GoldenGate 23ai | `container-registry.oracle.com/goldengate/goldengate-oracle:latest` |
+| Oracle Database 23ai Free | `container-registry.oracle.com/database/free:23.26.1.0-lite-arm64` |
+| Oracle GoldenGate Veridata | `container-registry.oracle.com/goldengate/goldengate-veridata:23.26.1.0.1` |
+
+**Before pulling any image or running `docker compose up`, you must accept the license for each image:**
+
+1. Go to [https://container-registry.oracle.com](https://container-registry.oracle.com)
+2. Sign in with your Oracle account (free registration)
+3. Search for each repository listed above and click **Accept License**
+4. Log in to OCR from your terminal:
+   ```bash
+   docker login container-registry.oracle.com
+   ```
+
+You can then pull the images manually to verify access before running the lab:
+
+```bash
+docker pull container-registry.oracle.com/goldengate/goldengate-oracle:latest
+docker pull container-registry.oracle.com/database/free:23.26.1.0-lite-arm64
+docker pull container-registry.oracle.com/goldengate/goldengate-veridata:23.26.1.0.1
+```
+
+> **Note:** Pulling without accepting the license will result in a `401 Unauthorized` or `403 Forbidden` error even after `docker login`.
+
+---
+
+## Quick Start
+
+### 1. Clone and configure
+
+```bash
+git clone <this-repo-url>
+cd <repo-dir>
+
+cp .env.example .env
+cp vdt.env.example vdt.env
+# Open both files and set your passwords
+```
+
+### 2. Accept OCR licenses and log in (see above)
+
+```bash
+docker login container-registry.oracle.com
+```
+
+### 3. Run the lab
+
+```bash
+./0_start_lab.sh
+```
+
+This single script orchestrates the full setup (~15–25 min depending on hardware):
+
+| Step | Script | What happens |
+|------|--------|-------------|
+| 1 | — | `docker compose down -v` — clean slate |
+| 2 | — | `docker compose up -d` — start all containers |
+| 3 | `post_compose_setup.sh` | Configure DBs, install HR schema, enable ACDR |
+| 4 | `3_archivelog_cleanup.sh --setup` | Deploy archivelog purge cron inside containers |
+| 5 | `1_create_replication.sh` | Create GoldenGate extract, distribution path, replicat |
+| 6–8 | `Veridata/0_check_veridata_agents.sh` | Agent status check before and after setup |
+| 7 | `Veridata/1_create_veridata_agent.sh` | Create Veridata agent deployment |
+| 9 | `Veridata/2_create_veridata_connections.sh` | Create WEST + EAST database connections |
+| 10 | `Veridata/3_create_veridata_profile.sh` | Create all comparison profiles |
+| 11 | `Veridata/4_create_veridata_group_and_pairs.sh` | Create HR compare group and table pairs |
+| 12 | `Veridata/5_run_veridata_comparison.sh` | Run initial HR comparison |
+| 13 | `Veridata/6_schedule_veridata_job.sh` | Schedule daily comparison job |
+
+---
+
+## Access URLs
+
+| Service | URL | Default user |
+|---------|-----|-------------|
+| GoldenGate WEST | https://localhost:9090 | `oggadmin` |
+| GoldenGate EAST | https://localhost:8080 | `oggadmin` |
+| Veridata | https://localhost:8831/veridata | `veridata` |
+| Database WEST | `localhost:1534/FREEPDB1` | `sys` |
+| Database EAST | `localhost:1535/FREEPDB1` | `sys` |
+
+Passwords are set in `.env` and `vdt.env`. The GoldenGate UI uses a self-signed certificate — accept the browser warning on first access.
+
+---
+
+## Repository Structure
+
+```
+.
+├── 0_start_lab.sh                  # Main entry point — runs all steps in order
+├── post_compose_setup.sh           # DB config: GG params, HR schema, Auto-CDR
+├── 1_create_replication.sh         # GoldenGate process creation
+├── 3_archivelog_cleanup.sh         # Archivelog purge cron (runs inside containers)
+├── compose.yaml                    # Docker Compose stack definition
+├── .env.example                    # Environment variable template → copy to .env
+├── vdt.env.example                 # Veridata environment template → copy to vdt.env
+├── vdt-entrypoint.sh               # Custom entrypoint mounted into the Veridata container
+├── cert/
+│   ├── ca.pem                      # CA certificate for GG TLS
+│   ├── ogg.pem                     # GG server certificate
+│   └── ogg.key                     # GG server private key (excluded from git)
+├── Grafana/
+│   └── Main Dashboard-*.json       # Grafana dashboard exports (optional import)
+└── Veridata/
+    ├── 0_check_veridata_agents.sh
+    ├── 1_create_veridata_agent.sh
+    ├── 2_create_veridata_connections.sh
+    ├── 3_create_veridata_profile.sh
+    ├── 4_create_veridata_group_and_pairs.sh
+    ├── 5_run_veridata_comparison.sh
+    └── 6_schedule_veridata_job.sh
+```
+
+---
+
+## Common Operations
+
+**Re-run Veridata comparison:**
+```bash
+./Veridata/5_run_veridata_comparison.sh --profile HR_PROFILE_MEDIUM --latest-group
+```
+
+**Check archivelog cleanup status:**
+```bash
+./3_archivelog_cleanup.sh --status
+./3_archivelog_cleanup.sh --logs
+```
+
+**Tear down and start fresh:**
+```bash
+docker compose down -v
+./0_start_lab.sh
+```
+
+**Connect to a database container:**
+```bash
+docker exec -it dbWEST bash
+docker exec -it dbEAST bash
+```
+
+---
+
+## Notes
+
+- The Oracle Database 23ai Free image has `ARCHIVELOG` mode and `FORCE LOGGING` enabled by default — no database restart is needed during setup.
+- The HR schema is downloaded at runtime from the public [oracle-samples/db-sample-schemas](https://github.com/oracle-samples/db-sample-schemas) GitHub repository. Internet access is required during `post_compose_setup.sh`.
+- GoldenGate processes use self-signed TLS certificates located in `cert/`. These are pre-generated for the lab and mounted into the GG containers.
+- Veridata state is stored in a Docker named volume (`veridata_data`). Running `docker compose down -v` will reset it.
+
+---
+
+## Author
+
+Alex Lima — Oracle GoldenGate Product Manager

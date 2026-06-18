@@ -1,0 +1,1558 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 1,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 45,
+      "panels": [],
+      "title": "Row title",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "PC4E26341E64AB117"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "displayName": "${__field.labels.resource-name}",
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "index": 0,
+                  "text": "Stopped"
+                },
+                "1": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "Running"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 0,
+        "y": 1
+      },
+      "id": 5,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "titleSize": 25,
+          "valueSize": 15
+        },
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "bdkbvyvidpvcwc"
+          },
+          "query": "from(bucket: \"oggbucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"resource-status_running\")\n  |> filter(fn: (r) => r[\"resource-name\"] == \"EWEST\" )\n  |> aggregateWindow(every: 5s, fn: last, createEmpty: false)\n  |> yield(name: \"last\")\n",
+          "refId": "A"
+        }
+      ],
+      "title": "",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "PC4E26341E64AB117"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "displayName": "${__field.labels.resource-name}",
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "index": 0,
+                  "text": "Stopped"
+                },
+                "1": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "Running"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 3,
+        "y": 1
+      },
+      "id": 32,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "titleSize": 25,
+          "valueSize": 15
+        },
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "bdkbvyvidpvcwc"
+          },
+          "query": "from(bucket: \"oggbucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"resource-status_running\")\n  |> filter(fn: (r) => r[\"resource-name\"] == \"RWEST\" )\n  |> aggregateWindow(every: 5s, fn: last, createEmpty: false)\n  |> yield(name: \"last\")\n",
+          "refId": "A"
+        }
+      ],
+      "title": "",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "PC4E26341E64AB117"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "displayName": "${__field.labels.resource-name}",
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "index": 0,
+                  "text": "Stopped"
+                },
+                "1": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "Running"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 6,
+        "y": 1
+      },
+      "id": 34,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "titleSize": 25,
+          "valueSize": 15
+        },
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "bdkbvyvidpvcwc"
+          },
+          "query": "from(bucket: \"oggbucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"resource-name\"] == \"DPWE\")\n  |> filter(fn: (r) => r[\"_measurement\"] == \"resource-status_running\")\n  |> filter(fn: (r) => r[\"deploymentName\"] == \"WEST\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
+          "refId": "A"
+        }
+      ],
+      "title": "",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "PC4E26341E64AB117"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 12,
+        "x": 12,
+        "y": 1
+      },
+      "id": 58,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "query": "b   = \"oggbucket\"\n\n// The heartbeats in the path, in order\nhbs = [\"EWEST\",\"DPWE\",\"RWEST\"]\n\n// 1) Base: max lag per heartbeat per window\nbase =\n  from(bucket: b)\n    |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n    |> filter(fn: (r) => r._measurement == \"heartbeat-timings_heartbeat-lag\")\n    |> filter(fn: (r) => contains(value: r[\"heartbeat-name\"], set: hbs))\n    // per-thread -> per-window: keep each heartbeats max\n    |> aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: false)\n    |> keep(columns: [\"_time\",\"_value\",\"heartbeat-name\"])\n\n// 2) Pivot so each heartbeat is a column: EWEST, DPWE, RWEST\npivoted =\n  base\n    |> pivot(\n        rowKey: [\"_time\"],\n        columnKey: [\"heartbeat-name\"],\n        valueColumn: \"_value\"\n    )\n\n// 3) Compute incremental lags and total\nsegments =\n  pivoted\n    |> map(fn: (r) => ({\n        _time: r._time,\n\n        // cumulative values (if missing, treat as 0)\n        ew:   if exists r.EWEST then float(v: r.EWEST) else 0.0,\n        dp:   if exists r.DPWE  then float(v: r.DPWE)  else 0.0,\n        rw:   if exists r.RWEST then float(v: r.RWEST) else 0.0,\n\n        // incremental lags (never negative)\n        extract: \n          if exists r.EWEST then float(v: r.EWEST) else 0.0,\n\n        routing:\n          if exists r.DPWE and exists r.EWEST and float(v: r.DPWE) > float(v: r.EWEST)\n          then float(v: r.DPWE) - float(v: r.EWEST)\n          else 0.0,\n\n        replicat:\n          if exists r.RWEST and exists r.DPWE and float(v: r.RWEST) > float(v: r.DPWE)\n          then float(v: r.RWEST) - float(v: r.DPWE)\n          else 0.0,\n\n        total:\n          if exists r.RWEST then float(v: r.RWEST) else 0.0,\n    }))\n\n// 4) Turn the wide segments into 4 ordered series\nextractSeries =\n  segments\n    |> map(fn: (r) => ({\n        _time: r._time,\n        _value: r.extract,\n        _measurement: \"1 Extract\"\n    }))\n    |> group(columns: [\"_measurement\"])\n\nroutingSeries =\n  segments\n    |> map(fn: (r) => ({\n        _time: r._time,\n        _value: r.routing,\n        _measurement: \"2 Distribution Path\"\n    }))\n    |> group(columns: [\"_measurement\"])\n\nreplicatSeries =\n  segments\n    |> map(fn: (r) => ({\n        _time: r._time,\n        _value: r.replicat,\n        _measurement: \"3 Replicat\"\n    }))\n    |> group(columns: [\"_measurement\"])\n\ntotalSeries =\n  segments\n    |> map(fn: (r) => ({\n        _time: r._time,\n        _value: r.total,\n        _measurement: \"4 Total\"\n    }))\n    |> group(columns: [\"_measurement\"])\n\n// 5) Show Extract + Dist Path + Replicat + Total\nunion(tables: [extractSeries, routingSeries, replicatSeries, totalSeries])\n  |> yield(name: \"Incremental lag by role + Total\")\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Heartbeat Lag",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "PC4E26341E64AB117"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 0,
+        "y": 3
+      },
+      "id": 36,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "bdkbvyvidpvcwc"
+          },
+          "query": "from(bucket: \"oggbucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) =>\n      r._measurement == \"trail-input_trail-seq\" or\n      r._measurement == \"trail-input_trail-rba\"\n  )\n  |> filter(fn: (r) => r.processName == \"RWEST\")\n  |> map(fn: (r) => ({\n      r with\n      _measurement:\n        if r._measurement == \"trail-input_trail-seq\" then \"SEQ\"\n        else if r._measurement == \"trail-input_trail-rba\" then \"RBA\"\n        else r._measurement\n  }))\n  // IMPORTANT: Recompute the group key to propagate the new _measurement\n  |> group(columns: [\"_measurement\", \"_field\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")\n",
+          "refId": "A"
+        }
+      ],
+      "title": "",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "PC4E26341E64AB117"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 3,
+        "y": 3
+      },
+      "id": 35,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "bdkbvyvidpvcwc"
+          },
+          "query": "from(bucket: \"oggbucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) =>\n      r._measurement == \"trail-output_trail-seq\" or\n      r._measurement == \"trail-output_trail-rba\"\n  )\n  |> filter(fn: (r) => r.processName == \"EWEST\")\n  |> map(fn: (r) => ({\n      r with\n      _measurement:\n        if r._measurement == \"trail-output_trail-seq\" then \"SEQ\"\n        else if r._measurement == \"trail-output_trail-rba\" then \"RBA\"\n        else r._measurement\n  }))\n  // IMPORTANT: Recompute the group key to propagate the new _measurement\n  |> group(columns: [\"_measurement\", \"_field\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")\n",
+          "refId": "A"
+        }
+      ],
+      "title": "",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "PC4E26341E64AB117"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "DPWE LAG",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 700000000010
+              },
+              {
+                "color": "red",
+                "value": 900000000000
+              }
+            ]
+          },
+          "unit": "ns"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 6,
+        "y": 3
+      },
+      "id": 40,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto",
+        "text": {}
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "query": "from(bucket: \"oggbucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"processName\"] == \"DPWE\")\n  |> filter(fn: (r) => r[\"_measurement\"] == \"position-er_last-operation-lag\")\n  |> aggregateWindow(every: 5s, fn: last, createEmpty: false)\n  |> yield(name: \"last\")",
+          "refId": "A"
+        }
+      ],
+      "title": "",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "PC4E26341E64AB117"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 700000000010
+              },
+              {
+                "color": "red",
+                "value": 900000000010
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 0,
+        "y": 5
+      },
+      "id": 44,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 30
+        },
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "query": "from(bucket: \"oggbucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r[\"_field\"] == \"value\" and\n    r[\"_measurement\"] == \"position-high-operation-lag\" and\n    r[\"deploymentName\"] == \"WEST\" and\n    r[\"processType\"] == \"extract\" and\n    r[\"processName\"] == \"EWEST\"\n  )\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> yield(name: \"EWEST-lag\")\n",
+          "refId": "A"
+        }
+      ],
+      "title": "HWL",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "PC4E26341E64AB117"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "fieldMinMax": false,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 700000000010
+              },
+              {
+                "color": "red",
+                "value": 900000000010
+              }
+            ]
+          },
+          "unit": "ns"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 3,
+        "y": 5
+      },
+      "id": 51,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 30
+        },
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "query": "from(bucket: \"oggbucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r[\"_field\"] == \"value\" and\n    r[\"_measurement\"] == \"position-er_high-watermark-lag\" and\n    r[\"deploymentName\"] == \"EAST\" and\n    r[\"processType\"] == \"replicat\" and\n    r[\"processName\"] == \"RWEST\"\n  )\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> yield(name: \"RWEST-lag\")\n",
+          "refId": "A"
+        }
+      ],
+      "title": "HWL",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "PC4E26341E64AB117"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 5
+      },
+      "id": 59,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "query": "b   = \"oggbucket\"\n\n// The heartbeats in the path, in order\nhbs = [\"EWEST\",\"DPWE\",\"RWEST\"]\n\n// 1) Base: max lag per heartbeat per window\nbase =\n  from(bucket: b)\n    |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n    |> filter(fn: (r) => r._measurement == \"heartbeat-timings_heartbeat-lag\")\n    |> filter(fn: (r) => contains(value: r[\"heartbeat-name\"], set: hbs))\n    // per-thread -> per-window: keep each heartbeats max\n    |> aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: false)\n    |> keep(columns: [\"_time\",\"_value\",\"heartbeat-name\"])\n\n// 2) Pivot so each heartbeat is a column: EWEST, DPWE, RWEST\npivoted =\n  base\n    |> pivot(\n        rowKey: [\"_time\"],\n        columnKey: [\"heartbeat-name\"],\n        valueColumn: \"_value\"\n    )\n\n// 3) Compute incremental lags and total\nsegments =\n  pivoted\n    |> map(fn: (r) => ({\n        _time: r._time,\n\n        // cumulative values (if missing, treat as 0)\n        ew:   if exists r.EWEST then float(v: r.EWEST) else 0.0,\n        dp:   if exists r.DPWE  then float(v: r.DPWE)  else 0.0,\n        rw:   if exists r.RWEST then float(v: r.RWEST) else 0.0,\n\n        // incremental lags (never negative)\n        extract: \n          if exists r.EWEST then float(v: r.EWEST) else 0.0,\n\n        routing:\n          if exists r.DPWE and exists r.EWEST and float(v: r.DPWE) > float(v: r.EWEST)\n          then float(v: r.DPWE) - float(v: r.EWEST)\n          else 0.0,\n\n        replicat:\n          if exists r.RWEST and exists r.DPWE and float(v: r.RWEST) > float(v: r.DPWE)\n          then float(v: r.RWEST) - float(v: r.DPWE)\n          else 0.0,\n\n        total:\n          if exists r.RWEST then float(v: r.RWEST) else 0.0,\n    }))\n\n// 4) Turn the wide segments into 4 ordered series\nextractSeries =\n  segments\n    |> map(fn: (r) => ({\n        _time: r._time,\n        _value: r.extract,\n        _measurement: \"1 Extract\"\n    }))\n    |> group(columns: [\"_measurement\"])\n\nroutingSeries =\n  segments\n    |> map(fn: (r) => ({\n        _time: r._time,\n        _value: r.routing,\n        _measurement: \"2 Distribution Path\"\n    }))\n    |> group(columns: [\"_measurement\"])\n\nreplicatSeries =\n  segments\n    |> map(fn: (r) => ({\n        _time: r._time,\n        _value: r.replicat,\n        _measurement: \"3 Replicat\"\n    }))\n    |> group(columns: [\"_measurement\"])\n\ntotalSeries =\n  segments\n    |> map(fn: (r) => ({\n        _time: r._time,\n        _value: r.total,\n        _measurement: \"4 Total\"\n    }))\n    |> group(columns: [\"_measurement\"])\n\n// 5) Show Extract + Dist Path + Replicat + Total\nunion(tables: [extractSeries, routingSeries, replicatSeries, totalSeries])\n  |> yield(name: \"Incremental lag by role + Total\")\n",
+          "refId": "A"
+        }
+      ],
+      "title": "New panel",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "PC4E26341E64AB117"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 700000000010
+              },
+              {
+                "color": "red",
+                "value": 900000000010
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 0,
+        "y": 7
+      },
+      "id": 52,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 30
+        },
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "query": "from(bucket: \"oggbucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r[\"_field\"] == \"value\" and\n    r[\"_measurement\"] == \"position-er_low-watermark-lag\" and\n    r[\"deploymentName\"] == \"WEST\" and\n    r[\"processType\"] == \"extract\" and\n    r[\"processName\"] == \"EWEST\"\n  )\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> yield(name: \"EWEST-low-watermark-lag\")\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Lag at Chpkt (LWL)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "PC4E26341E64AB117"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 700000000010
+              },
+              {
+                "color": "red",
+                "value": 900000000010
+              }
+            ]
+          },
+          "unit": "ns"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 3,
+        "y": 7
+      },
+      "id": 53,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 30
+        },
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "query": "from(bucket: \"oggbucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r[\"_field\"] == \"value\" and\n    r[\"_measurement\"] == \"position-er_low-watermark-lag\" and\n    r[\"deploymentName\"] == \"EAST\" and\n    r[\"processType\"] == \"replicat\" and\n    r[\"processName\"] == \"RWEST\"\n  )\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> yield(name: \"RWEST-low-watermark-lag\")\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Lag at Chpkt (LWL)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "PC4E26341E64AB117"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 700000000010
+              },
+              {
+                "color": "red",
+                "value": 900000000010
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 0,
+        "y": 9
+      },
+      "id": 55,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 30
+        },
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "query": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Time Since Chkpt",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "PC4E26341E64AB117"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 700000000010
+              },
+              {
+                "color": "red",
+                "value": 900000000010
+              }
+            ]
+          },
+          "unit": "ns"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 3,
+        "y": 9
+      },
+      "id": 54,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 30
+        },
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "query": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Time Since Chkpt",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "PC4E26341E64AB117"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 0,
+        "y": 11
+      },
+      "id": 18,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "bdkbvyvidpvcwc"
+          },
+          "query": "from(bucket: \"oggbucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"statistics-extract_mapped-total-updates\")\n  |> filter(fn: (r) => r[\"processName\"] == \"EWEST\")\n  |> aggregateWindow(every: 5s, fn: last, createEmpty: false)\n  |> yield(name: \"last\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Updates EWEST",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "PC4E26341E64AB117"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 3,
+        "y": 11
+      },
+      "id": 21,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "bdkbvyvidpvcwc"
+          },
+          "query": "from(bucket: \"oggbucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"statistics-replicat_mapped-total-updates\")\n  |> filter(fn: (r) => r[\"processName\"] == \"RWEST\")\n  |> aggregateWindow(every: 5s, fn: last, createEmpty: false)\n  |> yield(name: \"last\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Updates RWEST",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "PC4E26341E64AB117"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "displayName": "${__field.labels.processName}",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ns"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 11
+      },
+      "id": 30,
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean"
+          ],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "bdkbvyvidpvcwc"
+          },
+          "query": "from(bucket: \"oggbucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"processName\"] == \"EEAST\" or r[\"processName\"] == \"EWEST\" or r[\"processName\"] == \"REAST\" or r[\"processName\"] == \"RWEST\")\n  |> filter(fn: (r) => r[\"_measurement\"] == \"position-er_last-operation-lag\")\n  |> aggregateWindow(every: 5s, fn: last, createEmpty: false)\n  |> yield(name: \"last\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Last Ops Lag",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "PC4E26341E64AB117"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 0,
+        "y": 13
+      },
+      "id": 25,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "bdkbvyvidpvcwc"
+          },
+          "query": "from(bucket: \"oggbucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"statistics-extract_mapped-total-deletes\")\n  |> filter(fn: (r) => r[\"processName\"] == \"EWEST\")\n  |> aggregateWindow(every: 5s, fn: last, createEmpty: false)\n  |> yield(name: \"last\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Deletes EWEST",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "PC4E26341E64AB117"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 3,
+        "y": 13
+      },
+      "id": 22,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "bdkbvyvidpvcwc"
+          },
+          "query": "from(bucket: \"oggbucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"statistics-replicat_mapped-total-deletes\")\n  |> filter(fn: (r) => r[\"processName\"] == \"RWEST\")\n  |> aggregateWindow(every: 5s, fn: last, createEmpty: false)\n  |> yield(name: \"last\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Deletes RWEST",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "PC4E26341E64AB117"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 0,
+        "y": 15
+      },
+      "id": 19,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "bdkbvyvidpvcwc"
+          },
+          "query": "from(bucket: \"oggbucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"statistics-extract_mapped-total-inserts\")\n  |> filter(fn: (r) => r[\"processName\"] == \"EWEST\")\n  |> aggregateWindow(every: 5s, fn: last, createEmpty: false)\n  |> yield(name: \"last\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Inserts EWEST",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "PC4E26341E64AB117"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 3,
+        "y": 15
+      },
+      "id": 23,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "bdkbvyvidpvcwc"
+          },
+          "query": "from(bucket: \"oggbucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"statistics-replicat_mapped-total-inserts\")\n  |> filter(fn: (r) => r[\"processName\"] == \"RWEST\")\n  |> aggregateWindow(every: 5s, fn: last, createEmpty: false)\n  |> yield(name: \"last\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Inserts RWEST",
+      "type": "stat"
+    }
+  ],
+  "preload": false,
+  "refresh": "5s",
+  "schemaVersion": 41,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "text": "RWEST",
+          "value": "RWEST"
+        },
+        "definition": "import \"influxdata/influxdb/v1\"\n\nv1.tagValues(\n  bucket: \"oggbucket\",\n  tag: \"processName\",\n  predicate: (r) => r.processType == \"extract\" or (r.processType == \"replicat\" and r.processName !~ /[0-9]$/),\n  start: v.timeRangeStart\n)\n",
+        "label": "Process Name",
+        "name": "ProcessName",
+        "options": [],
+        "query": {
+          "query": "import \"influxdata/influxdb/v1\"\n\nv1.tagValues(\n  bucket: \"oggbucket\",\n  tag: \"processName\",\n  predicate: (r) => r.processType == \"extract\" or (r.processType == \"replicat\" and r.processName !~ /[0-9]$/),\n  start: v.timeRangeStart\n)\n"
+        },
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "current": {
+          "text": "DPWE",
+          "value": "DPWE"
+        },
+        "definition": "import \"influxdata/influxdb/schema\"\n\nb = \"oggbucket\"\n\n// Pull names from all three possible tags independently.\n// (No range needed; uses tag catalogs.)\nv1 = schema.tagValues(bucket: b, tag: \"resource-name\")\n      |> rename(columns: {_value: \"_value\"})\n      |> keep(columns: [\"_value\"])\n\nv2 = schema.tagValues(bucket: b, tag: \"pathName\")\n      |> rename(columns: {_value: \"_value\"})\n      |> keep(columns: [\"_value\"])\n\nv3 = schema.tagValues(bucket: b, tag: \"processName\")\n      |> rename(columns: {_value: \"_value\"})\n      |> keep(columns: [\"_value\"])\n\n// Union & clean:\n// - drop names ending with digits (…00, …01, …02)\n// - optionally, keep only names that LOOK like paths (often start with \"DP\")\nunion(tables: [v1, v2, v3])\n  |> filter(fn: (r) => not r._value =~ /.*\\d$/)      // exclude Replicat threads\n  // |> filter(fn: (r) => r._value =~ /^DP/)         // <— optional: keep only names starting with DP\n  |> distinct(column: \"_value\")\n  |> sort(columns: [\"_value\"])\n",
+        "description": "With Dist Path",
+        "label": "Process Name 2",
+        "name": "ProcessName2",
+        "options": [],
+        "query": {
+          "query": "import \"influxdata/influxdb/schema\"\n\nb = \"oggbucket\"\n\n// Pull names from all three possible tags independently.\n// (No range needed; uses tag catalogs.)\nv1 = schema.tagValues(bucket: b, tag: \"resource-name\")\n      |> rename(columns: {_value: \"_value\"})\n      |> keep(columns: [\"_value\"])\n\nv2 = schema.tagValues(bucket: b, tag: \"pathName\")\n      |> rename(columns: {_value: \"_value\"})\n      |> keep(columns: [\"_value\"])\n\nv3 = schema.tagValues(bucket: b, tag: \"processName\")\n      |> rename(columns: {_value: \"_value\"})\n      |> keep(columns: [\"_value\"])\n\n// Union & clean:\n// - drop names ending with digits (…00, …01, …02)\n// - optionally, keep only names that LOOK like paths (often start with \"DP\")\nunion(tables: [v1, v2, v3])\n  |> filter(fn: (r) => not r._value =~ /.*\\d$/)      // exclude Replicat threads\n  // |> filter(fn: (r) => r._value =~ /^DP/)         // <— optional: keep only names starting with DP\n  |> distinct(column: \"_value\")\n  |> sort(columns: [\"_value\"])\n"
+        },
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "current": {
+          "text": "EAST",
+          "value": "EAST"
+        },
+        "definition": "import \"influxdata/influxdb/schema\"\n\nb = \"oggbucket\"\n\n// Pull candidate names from several possible tag keys\nv1 = schema.tagValues(bucket: b, tag: \"deployment\")\n      |> keep(columns: [\"_value\"])\nv2 = schema.tagValues(bucket: b, tag: \"deploymentName\")\n      |> keep(columns: [\"_value\"])\nv3 = schema.tagValues(bucket: b, tag: \"deployment-name\")\n      |> keep(columns: [\"_value\"])\nv4 = schema.tagValues(bucket: b, tag: \"serviceName\")  // some exporters use this\n\nunion(tables: [v1, v2, v3, v4])\n  |> filter(fn: (r) => exists r._value and r._value != \"\")\n  |> distinct(column: \"_value\")\n  |> sort(columns: [\"_value\"])\n",
+        "label": "Deployment Name",
+        "name": "DeploymentName",
+        "options": [],
+        "query": {
+          "query": "import \"influxdata/influxdb/schema\"\n\nb = \"oggbucket\"\n\n// Pull candidate names from several possible tag keys\nv1 = schema.tagValues(bucket: b, tag: \"deployment\")\n      |> keep(columns: [\"_value\"])\nv2 = schema.tagValues(bucket: b, tag: \"deploymentName\")\n      |> keep(columns: [\"_value\"])\nv3 = schema.tagValues(bucket: b, tag: \"deployment-name\")\n      |> keep(columns: [\"_value\"])\nv4 = schema.tagValues(bucket: b, tag: \"serviceName\")  // some exporters use this\n\nunion(tables: [v1, v2, v3, v4])\n  |> filter(fn: (r) => exists r._value and r._value != \"\")\n  |> distinct(column: \"_value\")\n  |> sort(columns: [\"_value\"])\n"
+        },
+        "refresh": 1,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Main Dashboard",
+  "uid": "ddhjn9w6m6y2oc",
+  "version": 3
+}
