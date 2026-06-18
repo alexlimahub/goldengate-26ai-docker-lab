@@ -183,6 +183,8 @@ Passwords are set in `.env` and `vdt.env`. The GoldenGate UI uses a self-signed 
 ├── 2_generate_load.sh              # Generates DML load on WEST for replication testing
 ├── 3_archivelog_cleanup.sh         # Archivelog purge cron (runs inside containers)
 ├── 4_delete_lab.sh                 # Tears down the stack and removes all volumes
+├── initial_load.sh                 # Full initial load: instantiates EAST from WEST while replication stays active
+├── add_acdr_schema.sql             # Reference: how to enable Auto-CDR on a custom schema
 ├── compose.yaml                    # Docker Compose stack definition
 ├── .env.example                    # Environment variable template → copy to .env
 ├── vdt.env.example                 # Veridata environment template → copy to vdt.env
@@ -202,6 +204,42 @@ Passwords are set in `.env` and `vdt.env`. The GoldenGate UI uses a self-signed 
     ├── 5_run_veridata_comparison.sh
     └── 6_schedule_veridata_job.sh
 ```
+
+---
+
+## Initial Load — Synchronizing WEST → EAST
+
+After replication is running, the data on both databases may be out of sync (EAST started empty or diverged). To perform a full initial load that instantiates all HR tables from WEST into EAST while keeping change replication active, run:
+
+```bash
+./initial_load.sh
+```
+
+This script automates the full GoldenGate initial load workflow:
+
+1. Stops and deletes existing replication processes (RWEST, DPWE, EWEST)
+2. Creates a new online change extract (`EWEST`) to capture changes during the load
+3. Captures the current SCN (System Change Number) from WEST
+4. Creates an initial load extract (`EINIT`) using `source:tables` — reads directly from WEST without impacting the change pipeline
+5. Streams data via a distribution path (`DPEI`) to EAST in parallel as EINIT writes
+6. Creates and runs an initial load replicat (`RINIT`) on EAST to apply all rows
+7. Once RINIT finishes, re-enables foreign key constraints on EAST
+8. Starts the change replicat (`RWEST`) at the captured SCN so no changes are missed
+
+> **When to use:** Run `initial_load.sh` any time EAST is empty, has been reset, or you suspect data drift between the two databases.
+
+---
+
+## Bonus — Auto-CDR Schema Reference
+
+The file `add_acdr_schema.sql` shows how **Auto-CDR (Automatic Conflict Detection and Resolution)** is enabled at the schema level in Oracle 26ai. It is pre-applied to the HR schema by `post_compose_setup.sh`, but is included here as a reference for customers who want to enable it on their own schemas:
+
+```bash
+# View the script
+cat add_acdr_schema.sql
+```
+
+Auto-CDR uses a last-writer-wins strategy based on commit timestamps and requires no application changes — Oracle handles conflict resolution automatically during GoldenGate apply.
 
 ---
 
