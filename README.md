@@ -35,6 +35,36 @@ A fully automated Docker Compose lab that provisions two Oracle Database 26ai Fr
 
 ---
 
+## Platform Notes
+
+This lab was developed and tested on **macOS Apple Silicon (ARM64)**. The `platform` settings in `compose.yaml` may need to be adjusted depending on your host:
+
+| Service | Current image/platform | Mac ARM (M1/M2/M3) | Mac Intel / Linux x86 / Windows (WSL2) |
+|---------|----------------------|-------------------|----------------------------------------|
+| GoldenGate (ggw/gge) | `linux/amd64` | Runs via Rosetta emulation — no change needed | Native — no change needed |
+| Veridata | `linux/amd64` | Runs via Rosetta emulation — no change needed | Native — no change needed |
+| Oracle DB (databaseW/databaseE) | `linux/arm64` + `-arm64` image tag | Native — no change needed | **Change required** — see below |
+
+### Oracle DB image on Intel / Linux x86 / Windows
+
+The DB image tag in `compose.yaml` is the ARM64 build (`23.26.1.0-lite-arm64`). On non-ARM hosts, replace it with the x86_64 equivalent for both `databaseW` and `databaseE`:
+
+```yaml
+# Replace this (ARM64 — Mac Apple Silicon):
+image: container-registry.oracle.com/database/free:23.26.1.0-lite-arm64
+platform: "linux/arm64"
+
+# With this (x86_64 — Intel Mac / Linux / Windows WSL2):
+image: container-registry.oracle.com/database/free:latest
+platform: "linux/amd64"
+```
+
+> On **Windows**, run everything inside WSL2 with Docker Desktop's WSL2 backend enabled. The `linux/amd64` platform applies.
+
+> On **Linux ARM64** (e.g. AWS Graviton), the DB image can stay as-is, but GoldenGate and Veridata will run under emulation (`linux/amd64`) — performance may vary.
+
+---
+
 ## Prerequisites
 
 - Docker Desktop (with at least 16 GB RAM allocated)
