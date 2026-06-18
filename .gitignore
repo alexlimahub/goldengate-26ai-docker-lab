@@ -2,8 +2,9 @@
 .env
 vdt.env
 
-# TLS private key
+# TLS private keys
 cert/ogg.key
+Veridata/cert/ogg.key
 
 # Runtime artifacts
 *.log
