@@ -152,6 +152,7 @@ Passwords are set in `.env` and `vdt.env`. The GoldenGate UI uses a self-signed 
 ├── 1_create_replication.sh         # GoldenGate process creation
 ├── 2_generate_load.sh              # Generates DML load on WEST for replication testing
 ├── 3_archivelog_cleanup.sh         # Archivelog purge cron (runs inside containers)
+├── 4_delete_lab.sh                 # Tears down the stack and removes all volumes
 ├── compose.yaml                    # Docker Compose stack definition
 ├── .env.example                    # Environment variable template → copy to .env
 ├── vdt.env.example                 # Veridata environment template → copy to vdt.env
@@ -187,10 +188,14 @@ Passwords are set in `.env` and `vdt.env`. The GoldenGate UI uses a self-signed 
 ./3_archivelog_cleanup.sh --logs
 ```
 
-**Tear down and start fresh:**
+**Delete the lab (full reset):**
 ```bash
-docker compose down -v
-./0_start_lab.sh
+./4_delete_lab.sh
+```
+
+**Stop containers but keep volumes (faster restart):**
+```bash
+./4_delete_lab.sh --soft
 ```
 
 **Connect to a database container:**
