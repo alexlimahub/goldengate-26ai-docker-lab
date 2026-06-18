@@ -1,11 +1,11 @@
 # This Docker Compose file is for education purpose only and it contains all necessary components 
-# to instantiate one Oracle GoldenGate 23 instance and two Oracle Database 23 Free instances
+# to instantiate one Oracle GoldenGate 26 instance and two Oracle Database 26 Free instances
 
-# This yaml file will create docker containers:
-#   1- Two Oracle Goldengate 23 Hub (WEST and EAST)
-#   2- One Oracle Database 23  (Named: West)
-#   3- One Oracle Database 23  (Named: East)
-#   4- One Oracle GoldenGate Veridata 23.5
+# This yaml file will create 5 docker containers:
+#   1- Two Oracle Goldengate 26 Hub (WEST and EAST)
+#   2- One Oracle Database 26  (Named: West)
+#   3- One Oracle Database 26  (Named: East)
+#   4- One Oracle GoldenGate Veridata 26.5
 
 # To connect to goldengate and databases you can go to:
 #  GG Microservices: https://localhost:9090  [ user: oggadmin, password: Welcome##123 ]
@@ -80,7 +80,7 @@ services:
     #platform: "linux/x86_64"
     platform: linux/amd64
 
-# Create WEST Side Database 23.8 Free
+# Create WEST Side Database 26.8 Free
   databaseW:
     container_name: dbWEST
     hostname: dbWEST
@@ -97,7 +97,7 @@ services:
         ipv4_address: ${DOCKER_DB_WEST_IP}
     platform: "linux/arm64"
 
-# Create EAST Side Database 23.8 Free
+# Create EAST Side Database 26.8 Free
   databaseE:
     container_name: dbEAST
     hostname: dbEAST
@@ -113,25 +113,6 @@ services:
       ogg_docker_network_v1:
         ipv4_address: ${DOCKER_DB_EAST_IP}
     platform: "linux/arm64"
-
-# # Create EAST Side Database 23.16
-#   database2326:
-#     container_name: db2326E
-#     hostname: db2326E
-#     image: iad.ocir.io/paasdevgg/alima-ocr/database/enterprise:latest
-#     #image: alexlima/db_free_slim_ogg:latest
-#     ports:
-#       - "1536:1521"
-#     env_file:
-#       - .env
-#     environment: 
-#       - INIT_SGA_SIZE=1536  
-#       - INIT_PGA_SIZE=1536
-#     restart: unless-stopped
-#     networks:
-#       ogg_docker_network_v1:
-#         ipv4_address: 172.52.0.105
-#     platform: "linux/x86_64"
 
 # Oracle GoldenGate Veridata
   veridata:

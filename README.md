@@ -1,6 +1,6 @@
 # Oracle GoldenGate 23ai Lab — Docker Compose
 
-A fully automated Docker Compose lab that provisions two Oracle Database 23ai Free instances with bidirectional GoldenGate replication and Veridata data comparison — all running locally on a single machine.
+A fully automated Docker Compose lab that provisions two Oracle Database 26ai Free instances with unidirectional GoldenGate replication (WEST → EAST) and Veridata data comparison — all running locally on a single machine.
 
 ---
 
@@ -11,8 +11,8 @@ A fully automated Docker Compose lab that provisions two Oracle Database 23ai Fr
   │                  Docker Network (172.52.0.0/16)        │
   │                                                        │
   │   ┌──────────────┐   GG Trail   ┌──────────────┐      │
-  │   │  dbWEST      │◄────────────►│  dbEAST      │      │
-  │   │  Oracle 23ai │              │  Oracle 23ai │      │
+  │   │  dbWEST      │────────────►│  dbEAST      │      │
+  │   │  Oracle 26ai │              │  Oracle 26ai │      │
   │   │  port 1534   │              │  port 1535   │      │
   │   └──────┬───────┘              └──────┬───────┘      │
   │          │                             │              │
@@ -29,8 +29,8 @@ A fully automated Docker Compose lab that provisions two Oracle Database 23ai Fr
   └────────────────────────────────────────────────────────┘
 ```
 
-**Replication pipeline:**
-- Change data: `EWEST` → trail `ew` → `DPWE` → trail `dw` → `RWEST` → dbEAST
+**Replication pipeline (unidirectional WEST → EAST):**
+- `EWEST` → trail `ew` → `DPWE` → trail `dw` → `RWEST` → dbEAST
 - HR schema is installed on both databases with Auto-CDR (conflict detection) enabled
 
 ---
@@ -86,8 +86,16 @@ cd <repo-dir>
 
 cp .env.example .env
 cp vdt.env.example vdt.env
-# Open both files and set your passwords
 ```
+
+**Open both files and set your passwords** — replace every `<your-password>` placeholder before running the lab:
+
+| File | Variables to set |
+|------|-----------------|
+| `.env` | `OGG_ADMIN_PWD`, `ORACLE_PASSWORD`, `GF_SECURITY_ADMIN_PASSWORD` |
+| `vdt.env` | `VDT_ADMINISTRATOR_PASSWORD` |
+
+> All services share the same password by convention. Choose one that meets Oracle's policy: at least 8 characters with upper, lower, digit, and special character (e.g. `MyLab##2026`).
 
 ### 2. Accept OCR licenses and log in (see above)
 
@@ -139,8 +147,10 @@ Passwords are set in `.env` and `vdt.env`. The GoldenGate UI uses a self-signed 
 ```
 .
 ├── 0_start_lab.sh                  # Main entry point — runs all steps in order
+├── 0_wait_for_stack.sh             # Polls GG + DB endpoints until the stack is ready
 ├── post_compose_setup.sh           # DB config: GG params, HR schema, Auto-CDR
 ├── 1_create_replication.sh         # GoldenGate process creation
+├── 2_generate_load.sh              # Generates DML load on WEST for replication testing
 ├── 3_archivelog_cleanup.sh         # Archivelog purge cron (runs inside containers)
 ├── compose.yaml                    # Docker Compose stack definition
 ├── .env.example                    # Environment variable template → copy to .env
