@@ -67,7 +67,7 @@ platform: "linux/amd64"
 
 ## Prerequisites
 
-- Docker Desktop (with at least 16 GB RAM allocated)
+- Docker Desktop with at least **16 GB RAM** and **8 CPUs** allocated *(tested configuration)*
 - `docker compose` v2+
 - `curl`, `unzip` available on the host machine
 - An Oracle account — **see license notice below**
@@ -118,14 +118,15 @@ cp .env.example .env
 cp vdt.env.example vdt.env
 ```
 
-**Open both files and set your passwords** — replace every `<your-password>` placeholder before running the lab:
+**Open both files and replace `YOUR_PASSWORD` with a single password used for all services:**
 
-| File | Variables to set |
-|------|-----------------|
-| `.env` | `OGG_ADMIN_PWD`, `ORACLE_PASSWORD`, `GF_SECURITY_ADMIN_PASSWORD` |
-| `vdt.env` | `VDT_ADMINISTRATOR_PASSWORD` |
+```bash
+# Example — use any editor:
+nano .env       # replace all YOUR_PASSWORD occurrences
+nano vdt.env    # replace YOUR_PASSWORD
+```
 
-> All services share the same password by convention. Choose one that meets Oracle's policy: at least 8 characters with upper, lower, digit, and special character (e.g. `MyLab##2026`).
+> Password must meet Oracle's policy: at least 8 characters with upper, lower, digit, and special character (e.g. `MyLab##2026`). The same password is used for GoldenGate, Oracle Database, Grafana, and Veridata.
 
 ### 2. Accept OCR licenses and log in (see above)
 
