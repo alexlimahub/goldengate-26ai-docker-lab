@@ -50,7 +50,7 @@ fi
 CONTAINER_WEST="dbWEST"
 CONTAINER_EAST="dbEAST"
 
-ORACLE_PWD="${ORACLE_PASSWORD:-Welcome##123}"
+ORACLE_PWD="${ORACLE_PASSWORD:?ERROR: ORACLE_PASSWORD not set. Copy .env.example to .env and set your password.}"
 
 GITHUB_API="https://api.github.com/repos/oracle-samples/db-sample-schemas/releases/latest"
 CONTAINER_SCHEMA_DIR="/tmp/hr_schema"   # staging path inside each container

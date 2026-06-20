@@ -29,6 +29,8 @@
 # =============================================================================
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+[[ -f "${SCRIPT_DIR}/.env"    ]] && source "${SCRIPT_DIR}/.env"
+[[ -f "${SCRIPT_DIR}/vdt.env" ]] && source "${SCRIPT_DIR}/vdt.env"
 
 # ---------------------------------------------------------------------------
 # Terminal colors
@@ -69,7 +71,7 @@ wait_for_veridata_api() {
     echo
 
     while true; do
-        TOKEN=$(curl -sk -u "veridata:Welcome##123" "${url}" \
+        TOKEN=$(curl -sk -u "${VDT_ADMINISTRATOR_USER:-veridata}:${VDT_ADMINISTRATOR_PASSWORD}" "${url}" \
                 | grep -o '"token":"[^"]*"' | cut -d'"' -f4)
         if [[ -n "$TOKEN" ]]; then
             print_ok "Veridata REST API is ready (${elapsed}s)"
@@ -200,9 +202,9 @@ for entry in "${STEP_TIMES[@]}"; do
 done
 echo
 echo "  Access:"
-echo "    GoldenGate WEST  →  https://localhost:9090  (oggadmin / Welcome##123)"
-echo "    GoldenGate EAST  →  https://localhost:8080  (oggadmin / Welcome##123)"
-echo "    Veridata         →  https://localhost:8831/veridata  (veridata / Welcome##123)"
+echo "    GoldenGate WEST  →  https://localhost:9090  (oggadmin / ${OGG_ADMIN_PWD})"
+echo "    GoldenGate EAST  →  https://localhost:8080  (oggadmin / ${OGG_ADMIN_PWD})"
+echo "    Veridata         →  https://localhost:8831/veridata  (${VDT_ADMINISTRATOR_USER:-veridata} / ${VDT_ADMINISTRATOR_PASSWORD})"
 echo "    Database WEST    →  localhost:1534/FREEPDB1"
 echo "    Database EAST    →  localhost:1535/FREEPDB1"
 echo "    Grafana          →  http://localhost:3000"

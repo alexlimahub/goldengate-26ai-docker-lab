@@ -14,10 +14,13 @@
 #   ./7_cleanup_veridata.sh           — interactive confirmation
 #   ./7_cleanup_veridata.sh --force   — skip confirmation prompt
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+[[ -f "${SCRIPT_DIR}/../vdt.env" ]] && source "${SCRIPT_DIR}/../vdt.env"
+
 VERIDATA_HOST="localhost"
 VERIDATA_PORT="8831"
-VERIDATA_USER="veridata"
-VERIDATA_PASS='Welcome##123'
+VERIDATA_USER="${VDT_ADMINISTRATOR_USER:-veridata}"
+VERIDATA_PASS="${VDT_ADMINISTRATOR_PASSWORD:?ERROR: VDT_ADMINISTRATOR_PASSWORD not set. Copy vdt.env.example to vdt.env and set your password.}"
 BASE_URL="https://${VERIDATA_HOST}:${VERIDATA_PORT}/veridata/v1"
 FORCE=false
 

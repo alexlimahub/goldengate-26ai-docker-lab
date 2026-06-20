@@ -7,12 +7,16 @@
 #   WEST -> Agent 1 (port 6826, DB 172.52.0.103)
 #   EAST -> Agent 2 (port 6827, DB 172.52.0.104)
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+[[ -f "${SCRIPT_DIR}/../vdt.env" ]] && source "${SCRIPT_DIR}/../vdt.env"
+[[ -f "${SCRIPT_DIR}/../.env"    ]] && source "${SCRIPT_DIR}/../.env"
+
 VERIDATA_HOST="localhost"
 VERIDATA_PORT="8831"
-VERIDATA_USER="veridata"
-VERIDATA_PASS='Welcome##123'
+VERIDATA_USER="${VDT_ADMINISTRATOR_USER:-veridata}"
+VERIDATA_PASS="${VDT_ADMINISTRATOR_PASSWORD:?ERROR: VDT_ADMINISTRATOR_PASSWORD not set. Copy vdt.env.example to vdt.env and set your password.}"
 DB_USER="HR"
-DB_PASS='Welcome##123'
+DB_PASS="${ORACLE_PASSWORD:?ERROR: ORACLE_PASSWORD not set. Copy .env.example to .env and set your password.}"
 AGENT_HOST="oggvdt"
 BASE_URL="https://${VERIDATA_HOST}:${VERIDATA_PORT}/veridata/v1"
 

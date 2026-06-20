@@ -17,10 +17,13 @@
 #   --latest-group          Auto-select the most recently created group (highest ID)
 #   --help, -h              Show this help
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+[[ -f "${SCRIPT_DIR}/../vdt.env" ]] && source "${SCRIPT_DIR}/../vdt.env"
+
 VERIDATA_HOST="localhost"
 VERIDATA_PORT="8831"
-VERIDATA_USER="veridata"
-VERIDATA_PASS='Welcome##123'
+VERIDATA_USER="${VDT_ADMINISTRATOR_USER:-veridata}"
+VERIDATA_PASS="${VDT_ADMINISTRATOR_PASSWORD:?ERROR: VDT_ADMINISTRATOR_PASSWORD not set. Copy vdt.env.example to vdt.env and set your password.}"
 BASE_URL="https://${VERIDATA_HOST}:${VERIDATA_PORT}/veridata/v1"
 
 GROUP_NAME=""          # resolved via menu, --group, or --latest-group

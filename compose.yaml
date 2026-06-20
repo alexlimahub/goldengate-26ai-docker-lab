@@ -8,18 +8,18 @@
 #   4- One Oracle GoldenGate Veridata 26.5
 
 # To connect to goldengate and databases you can go to:
-#  GG Microservices: https://localhost:9090  [ user: oggadmin, password: Welcome##123 ]
-#  GG Microservices: https://localhost:8080  [ user: oggadmin, password: Welcome##123 ]
+#  GG Microservices: https://localhost:9090  [ user: oggadmin, password: YOUR_PASSWORD ]
+#  GG Microservices: https://localhost:8080  [ user: oggadmin, password: YOUR_PASSWORD ]
 #  GG Veridata: http://localhost:8831/veridata  [ user: <veridata_user>, password: Welcome!1 ]
-#  GG InfluxDB: http://localhost:8806  [ user: admin, password: Welcome##123 ]
-#  GG Grafana: http://localhost:3000  [ user: admin, password: Welcome##123 ]
+#  GG InfluxDB: http://localhost:8806  [ user: admin, password: YOUR_PASSWORD ]
+#  GG Grafana: http://localhost:3000  [ user: admin, password: YOUR_PASSWORD ]
 #
-#  Database Service West for SQL Developer: localhost:1534/FREEPDB1  [ sys password: Welcome##123 ]
-#  Database Service East for SQL Developer: localhost:1535/FREEPDB1  [ sys password: Welcome##123 ]
+#  Database Service West for SQL Developer: localhost:1534/FREEPDB1  [ sys password: YOUR_PASSWORD ]
+#  Database Service East for SQL Developer: localhost:1535/FREEPDB1  [ sys password: YOUR_PASSWORD ]
 #
 #  Internal ports all all the same: 1521
-#  Database Service West for GoldenGate: <IP>:1521/FREEPDB1  [ oggadmin password: Welcome##123 ]
-#  Database Service East for GoldenGate: <IP>:1521/FREEPDB1  [ oggadmin password: Welcome##123 ]
+#  Database Service West for GoldenGate: <IP>:1521/FREEPDB1  [ oggadmin password: YOUR_PASSWORD ]
+#  Database Service East for GoldenGate: <IP>:1521/FREEPDB1  [ oggadmin password: YOUR_PASSWORD ]
 
 # Sample HR schema is installed on both databases
 
@@ -162,26 +162,26 @@ services:
   #     sh -lc '
   #       set -e;
   #       # Wait for WEST admin endpoint (inside the compose network)
-  #       until curl -sk -u oggadmin:Welcome##123 https://$${OGG_WEST_HOST}/services/v2/deployments/WEST -o /dev/null; do
+  #       until curl -sk -u oggadmin:YOUR_PASSWORD https://$${OGG_WEST_HOST}/services/v2/deployments/WEST -o /dev/null; do
   #         sleep 2;
   #       done;
   #       # 1) stop WEST
-  #       curl -sk -u oggadmin:Welcome##123 \
+  #       curl -sk -u oggadmin:YOUR_PASSWORD \
   #         -H "Content-Type: application/json" \
   #         -X PATCH https://$${OGG_WEST_HOST}/services/v2/deployments/WEST \
   #         --data-raw "{\"status\":\"stopped\",\"enabled\":false}";
   #       # 2) set metrics to StatsD on tig-aio:8125 (hostname, no hard IP)
-  #       curl -sk -u oggadmin:Welcome##123 \
+  #       curl -sk -u oggadmin:YOUR_PASSWORD \
   #         -H "Content-Type: application/json" \
   #         -X PATCH https://$${OGG_WEST_HOST}/services/v2/deployments/WEST \
   #         --data-raw "{\"metrics\":{\"enabled\":true,\"servers\":[{\"type\":\"pmsrvr\",\"protocol\":\"uds\"},{\"type\":\"statsd\",\"protocol\":\"udp\",\"host\":\"tig-aio\",\"port\":8125}]}}";
   #       # 3) start WEST
-  #       curl -sk -u oggadmin:Welcome##123 \
+  #       curl -sk -u oggadmin:YOUR_PASSWORD \
   #         -H "Content-Type: application/json" \
   #         -X PATCH https://$${OGG_WEST_HOST}/services/v2/deployments/WEST \
   #         --data-raw "{\"status\":\"running\",\"enabled\":true}";
   #       # Optional: quick check
-  #       curl -sk -u oggadmin:Welcome##123 https://$${OGG_WEST_HOST}/services/v2/deployments/WEST | jq -r ".metrics" || true;
+  #       curl -sk -u oggadmin:YOUR_PASSWORD https://$${OGG_WEST_HOST}/services/v2/deployments/WEST | jq -r ".metrics" || true;
   #     '
 
   #  # ---- One-shot init: EAST metrics -> StatsD (tig-aio:8125)
@@ -200,22 +200,22 @@ services:
   #   command: >
   #     sh -lc '
   #       set -e;
-  #       until curl -sk -u oggadmin:Welcome##123 https://$${OGG_EAST_HOST}/services/v2/deployments/EAST -o /dev/null; do
+  #       until curl -sk -u oggadmin:YOUR_PASSWORD https://$${OGG_EAST_HOST}/services/v2/deployments/EAST -o /dev/null; do
   #         sleep 2;
   #       done;
-  #       curl -sk -u oggadmin:Welcome##123 \
+  #       curl -sk -u oggadmin:YOUR_PASSWORD \
   #         -H "Content-Type: application/json" \
   #         -X PATCH https://$${OGG_EAST_HOST}/services/v2/deployments/EAST \
   #         --data-raw "{\"status\":\"stopped\",\"enabled\":false}";
-  #       curl -sk -u oggadmin:Welcome##123 \
+  #       curl -sk -u oggadmin:YOUR_PASSWORD \
   #         -H "Content-Type: application/json" \
   #         -X PATCH https://$${OGG_EAST_HOST}/services/v2/deployments/EAST \
   #         --data-raw "{\"metrics\":{\"enabled\":true,\"servers\":[{\"type\":\"pmsrvr\",\"protocol\":\"uds\"},{\"type\":\"statsd\",\"protocol\":\"udp\",\"host\":\"tig-aio\",\"port\":8125}]}}";
-  #       curl -sk -u oggadmin:Welcome##123 \
+  #       curl -sk -u oggadmin:YOUR_PASSWORD \
   #         -H "Content-Type: application/json" \
   #         -X PATCH https://$${OGG_EAST_HOST}/services/v2/deployments/EAST \
   #         --data-raw "{\"status\":\"running\",\"enabled\":true}";
-  #       curl -sk -u oggadmin:Welcome##123 https://$${OGG_EAST_HOST}/services/v2/deployments/EAST | jq -r ".metrics" || true;
+  #       curl -sk -u oggadmin:YOUR_PASSWORD https://$${OGG_EAST_HOST}/services/v2/deployments/EAST | jq -r ".metrics" || true;
   #     '
   # NEW: Dashboard importer service
   # grafana-dashboard-importer:

@@ -310,7 +310,7 @@ export APP_HOME=/u01/vdt
 #   VDT_ADMINISTRATOR_PASSWORD is always available from the container env.
 echo ">>> Restoring credentials to properties for config-assist..."
 _CA_ADMIN_USER="${VDT_ADMINISTRATOR_USER:-veridata}"
-_CA_ADMIN_PASS="${VDT_ADMINISTRATOR_PASSWORD:-Welcome##123}"
+_CA_ADMIN_PASS="${VDT_ADMINISTRATOR_PASSWORD:?ERROR: VDT_ADMINISTRATOR_PASSWORD not set in container environment.}"
 _CA_REPO_PASS="${REPO_PASS:-veridata}"
 # NOTE: Do NOT escape '#' as '\#' here.  In Java .properties files '#' only
 # starts a comment at the very beginning of a line; inside a value it is
